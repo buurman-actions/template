@@ -1,0 +1,16 @@
+name: "Template"
+description: "Apply a template to a project"
+inputs:
+    source:
+        description: "The path the template is located at relative to the feature root"
+        type: string
+        required: true
+    destination:
+        description: "The path to write the template to relative to the current directory"
+        type: string
+        required: true
+    variables:
+        description: "Template variables"
+        type: object
+        default: {}
+        required: false
