@@ -20,13 +20,13 @@ export const run: Action<Inputs> = async (
     const processPath = pathTemplate(variables);
     const tpl = fileTemplate(variables);
 
-    if (!context.path) {
-        throw new Error(
-            `Can't run template action, no path provided in action context.`,
-        );
-    }
+    const templateRoot = isAbsolute(source)
+        ? // source is absolute, ignore context.path
+          source
+        : // source is relative,
+          // join context.path (or cwd if not provided) with source
+          join(context.path || process.cwd(), source);
 
-    const templateRoot = join(context.path, source);
     const files = await readdir(templateRoot);
 
     for (const path of files) {

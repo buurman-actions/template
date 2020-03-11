@@ -8,10 +8,12 @@ export const run = async (context, { source, variables, destination }) => {
         : join(process.cwd(), destination);
     const processPath = pathTemplate(variables);
     const tpl = fileTemplate(variables);
-    if (!context.path) {
-        throw new Error(`Can't run template action, no path provided in action context.`);
-    }
-    const templateRoot = join(context.path, source);
+    const templateRoot = isAbsolute(source)
+        ? // source is absolute, ignore context.path
+            source
+        : // source is relative,
+            // join context.path (or cwd if not provided) with source
+            join(context.path || process.cwd(), source);
     const files = await readdir(templateRoot);
     for (const path of files) {
         const dest = join(destination, relative(templateRoot, path));

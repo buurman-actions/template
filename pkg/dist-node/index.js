@@ -17,12 +17,10 @@ const run = async (context, {
   destination = path.isAbsolute(destination) ? destination : path.join(process.cwd(), destination);
   const processPath = buurmanUtils.pathTemplate(variables);
   const tpl = buurmanUtils.fileTemplate(variables);
-
-  if (!context.path) {
-    throw new Error(`Can't run template action, no path provided in action context.`);
-  }
-
-  const templateRoot = path.join(context.path, source);
+  const templateRoot = path.isAbsolute(source) ? // source is absolute, ignore context.path
+  source : // source is relative,
+  // join context.path (or cwd if not provided) with source
+  path.join(context.path || process.cwd(), source);
   const files = await readdir(templateRoot);
 
   for (const path$1 of files) {
