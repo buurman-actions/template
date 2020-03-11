@@ -2,10 +2,12 @@ name: "Template"
 description: "Apply a template to a project"
 inputs:
     source:
+        long_name: "Template source directory"
         description: "The path the template is located at relative to the feature root"
         type: string
         required: true
     destination:
+        long_name: "Destination directory"
         description: "The path to write the template to relative to the current directory"
         type: string
         required: true
