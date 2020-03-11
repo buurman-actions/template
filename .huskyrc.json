@@ -1,6 +1,6 @@
 {
     "hooks": {
-        "pre-commit": "npm run build && lint-staged",
+        "pre-commit": "lint-staged && npm run build && git add pkg",
         "post-checkout": "npm run build"
     }
 }
