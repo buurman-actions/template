@@ -11,6 +11,12 @@ inputs:
         description: "The path to write the template to relative to the current directory"
         type: string
         required: true
+    overwrite:
+        long_name: "Overwrite existing files"
+        description: "Indicates existing files should be overwritten"
+        type: boolean
+        default: false
+        required: true
     variables:
         description: "Template variables"
         type: object

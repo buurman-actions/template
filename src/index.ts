@@ -1,17 +1,18 @@
 import { Action, fileTemplate, InputValues, pathTemplate } from "buurman-utils";
-import { mkdirp, readFile, writeFile } from "fs-extra";
+import { mkdirp, pathExists, readFile, writeFile } from "fs-extra";
 import { dirname, isAbsolute, join, relative } from "path";
 import readdir from "recursive-readdir";
 
 export interface Inputs extends InputValues {
     source: string;
     destination: string;
+    overwrite: boolean;
     variables: object;
 }
 
 export const run: Action<Inputs> = async (
     context,
-    { source, variables, destination },
+    { source, variables, destination, overwrite },
 ) => {
     destination = isAbsolute(destination)
         ? destination
@@ -33,6 +34,11 @@ export const run: Action<Inputs> = async (
         const dest = join(destination, relative(templateRoot, path));
         const filePath = processPath(dest);
         await mkdirp(dirname(filePath));
+
+        if (!overwrite && (await pathExists(filePath))) {
+            continue;
+        }
+
         await writeFile(filePath, tpl(await readFile(path, "utf-8")));
     }
 };
