@@ -1,7 +1,6 @@
 {
     "hooks": {
-        "pre-commit": "lint-staged",
-        "pre-push": "if test \"$(git status --porcelain)\" = \"\"; then; npm run build && git add pkg && git commit --amend --no-edit --no-verify; else; git stash save \"pre-push-$(date +\"%s\")\" -u && npm run build && git add pkg && git commit --amend --no-edit --no-verify && git stash pop; fi;",
+        "pre-commit": "lint-staged && npm run build && git add pkg",
         "post-checkout": "npm run build"
     }
 }
