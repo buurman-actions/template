@@ -12,7 +12,8 @@ var readdir = _interopDefault(require('recursive-readdir'));
 const run = async (context, {
   source,
   variables,
-  destination
+  destination,
+  overwrite
 }) => {
   destination = path.isAbsolute(destination) ? destination : path.join(process.cwd(), destination);
   const processPath = buurmanUtils.pathTemplate(variables);
@@ -27,6 +28,11 @@ const run = async (context, {
     const dest = path.join(destination, path.relative(templateRoot, path$1));
     const filePath = processPath(dest);
     await fsExtra.mkdirp(path.dirname(filePath));
+
+    if (!overwrite && (await fsExtra.pathExists(filePath))) {
+      continue;
+    }
+
     await fsExtra.writeFile(filePath, tpl((await fsExtra.readFile(path$1, "utf-8"))));
   }
 };

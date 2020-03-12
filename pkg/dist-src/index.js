@@ -1,8 +1,8 @@
 import { fileTemplate, pathTemplate } from "buurman-utils";
-import { mkdirp, readFile, writeFile } from "fs-extra";
+import { mkdirp, pathExists, readFile, writeFile } from "fs-extra";
 import { dirname, isAbsolute, join, relative } from "path";
 import readdir from "recursive-readdir";
-export const run = async (context, { source, variables, destination }) => {
+export const run = async (context, { source, variables, destination, overwrite }) => {
     destination = isAbsolute(destination)
         ? destination
         : join(process.cwd(), destination);
@@ -19,6 +19,9 @@ export const run = async (context, { source, variables, destination }) => {
         const dest = join(destination, relative(templateRoot, path));
         const filePath = processPath(dest);
         await mkdirp(dirname(filePath));
+        if (!overwrite && (await pathExists(filePath))) {
+            continue;
+        }
         await writeFile(filePath, tpl(await readFile(path, "utf-8")));
     }
 };
