@@ -1,5 +1,7 @@
 name: "Template"
 description: "Apply a template to a project"
+requirements: "true"
+applicable: "true"
 inputs:
     source:
         long_name: "Template source directory"
